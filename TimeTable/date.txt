@@ -25,16 +25,16 @@ B:
   Curs - AI
 C:
   Constrangeri
-    - Indisponibil: Marti 16:00-20:00
+    - Indisponibil: Marti 16:00-18:00
   Curs - IMR
 D:
   Constrangeri
-    - Indisponibil: Luni 8:00-12:00
-    - Preferinta: Miercuri 8:00-20:00
+    - Indisponibil: Luni 10:00-12:00
+    - Preferinta: Miercuri 18:00-20:00
   Curs - Logica
 E:
   Constrangeri
-    - Preferinta: Joi 8:00-20:00
+    - Preferinta: Joi 8:00-10:00
   Curs - Mate
 F:
   Constrangeri
