@@ -1,25 +1,30 @@
 Cursuri: SD, Mate, ACSO, BD, RC, AI, ML, IMR, SI
 
 Profesori:
-A: SD,AI,ML
+A: 
+   Curs - SD,AI,ML
    Constrangeri:
    -Indisponibil: Luni 8:00-10:00 10:00-12:00 12:00-14:00 14:00-16:00 16:00-18:00 18:00-20:00
 
-B: Mate, IMR
+B: 
+   Curs - Mate, IMR
    Constrangeri:
    -Preferinta: cursurile de Mate Luni
    -Preferinta: cursurile de IMR Marti
 
-C: BD, RC
+C: 
+   Curs - BD, RC
    Constrangeri:
    -Preferinta: cursurile de BD Miercuri
    -Preferinta: cursurile de RC Joi
    -Indisponibil: Vineri 16:00-18:00, 18:00-20:00
 
-D: ACSO
+D: 
+   Curs - ACSO
    Constrangeri: -
 
-E: SI
+E: 
+   Curs - SI
    Constrangeri: -
 
 Grupe:
