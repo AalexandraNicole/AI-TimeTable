@@ -1,13 +1,15 @@
 Cursuri: Rust, Java, OOP, BD, RC, AI, ML, CSSO, Python
 
 Profesori:
-A: OOP, CSSO
+A: 
+   Curs - OOP, CSSO
    Constrangeri:
    -Preferinta: Marti 16:00-18:00, 18:00-20:00
    -Preferinta: Miercuri 14:00-16:00, 16:00-18:00, 18:00-20:00
    -Preferinta: Joi 16:00-18:00, 18:00-20:00
 
-B: Rust, Python
+B: 
+   Curs - Rust, Python
    Constrangeri:
    -Indisponibil: Luni 12:00-14:00, 14:00-16:00, 16:00-18:00
    -Indisponibil: Marti 10:00-12:00, 12:00-14:00, 14:00:16:00
@@ -15,20 +17,24 @@ B: Rust, Python
    -Indisponibil: Joi 12:00-14:00, 14:00-16:00
    -Indisponibil: Vineri 8:00-10:00, 10:00-12:00, 12:00-14:00, 14:00-16:00, 16:00-18:00, 18:00-20:00 
 
-C: BD, RC
+C: 
+   Curs - BD, RC
    Constrangeri:-
 
-D: ML
+D: 
+   Curs - ML
    Constrangeri: 
    -Preferinta: Marti 16:00-18:00, 18:00-20:00
    -Preferinta: Joi 16:00-18:00, 18:00-20:00 
    -Preferinta: Vineri 8:00-10:00, 10:00-12:00, 12:00-14:00, 14:00-16:00
 
-E: Java
+E: 
+   Curs - Java
    Constrangeri:
    -Preferinta: sala C112
 
-F: AI
+F: 
+   Curs - AI
    Constrangeri: 
    -Preferinta: sala C2
 
