@@ -1,45 +1,59 @@
 # Cursuri
 Cursuri:
-SD
-Mate
-BD
-RC
-AI
-Logica
-ML
-IMR
-SI
+SD(1A) - A
+SD(1B) - A
+SD(1E) - A
+RC(1A) - A
+AI(2A) - B
+AI(2E) - B
+RC(2A) - B
+RC(2B) - B
+IMR(3B) - C
+IMR(3E) - C
+BD(1B) - C
+BD(2A) - C
+Logica(1E) - D
+Logica(3A) - D
+ML(2E) - D
+ML(3A) - D
+ML(3B) - D
+ML(3E) - D
+Mate(1A) - E
+Mate(1B) - E
+SI(2B) - E
+SI(2E) - E
+SI(3A) - E
+SI(3B) - E
+SI(3E) - E
+AI(3A) - F
+AI(3B) - F
+AI(3E) - F
+BD(2B) - F
 
 # Profesori
 Profesori:
 A:
-  Constrangeri
+  Constrangeri:
     - Indisponibil: Luni 8:00-10:00
     - Indisponibil: Marti 10:00-12:00
     - Preferinta: Miercuri 8:00-10:00
-  Curs - SD, RC
 B:
-  Constrangeri
+  Constrangeri:
     - Indisponibil: Luni 10:00-12:00
     - Preferinta: Vineri 8:00-10:00
-  Curs - AI
 C:
-  Constrangeri
+  Constrangeri:
     - Indisponibil: Marti 16:00-18:00
-  Curs - IMR
 D:
-  Constrangeri
+  Constrangeri:
     - Indisponibil: Luni 10:00-12:00
     - Preferinta: Miercuri 18:00-20:00
-  Curs - Logica
 E:
-  Constrangeri
+  Constrangeri:
     - Preferinta: Joi 8:00-10:00
-  Curs - Mate
 F:
-  Constrangeri
+  Constrangeri:
     - Indisponibil: Vineri 14:00-16:00
-  Curs - AI, BD
 
 # Săli
 Sali:
@@ -73,6 +87,7 @@ Grupe:
 # Intervale de timp
 Zile_saptamana:
 Luni, Marti, Miercuri, Joi, Vineri
+
 Intervale_orare:
 8:00-10:00, 10:00-12:00, 12:00-14:00, 14:00-16:00, 16:00-18:00, 18:00-20:00
 

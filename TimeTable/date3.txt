@@ -1,0 +1,103 @@
+Cursuri:
+OOP(1A) - A
+OOP(2A) - A
+CSSO(3E) - A
+Rust(3B) - B
+Rust(3E) - B
+Python(1B) - B
+Python(2A) - B
+BD(1E) - C
+RC(2E) - C
+RC(3A) - C
+ML(3B) - D
+Java(1E) - E
+Java(3A) - E
+AI(2E) - F
+CSSO(2B) - F
+
+Profesori:
+A:
+   Constrangeri:
+   - Preferinta: Marti 16:00-18:00
+   - Preferinta: Marti 18:00-20:00
+   - Preferinta: Miercuri 14:00-16:00
+   - Preferinta: Miercuri 16:00-18:00
+   - Preferinta: Miercuri 18:00-20:00
+   - Preferinta: Joi 18:00-20:00
+
+B:
+   Constrangeri:
+   - Indisponibil: Luni 12:00-14:00
+   - Indisponibil: Luni 14:00-16:00
+   - Indisponibil: Luni 16:00-18:00
+   - Indisponibil: Marti 14:00:16:00
+   - Indisponibil: Miercuri 16:00-18:00
+   - Indisponibil: Joi 12:00-14:00
+   - Indisponibil: Joi 14:00-16:00
+   - Indisponibil: Vineri 8:00-10:00
+   - Indisponibil: Vineri 10:00-12:00
+   - Indisponibil: Vineri 12:00-14:00
+   - Indisponibil: Vineri 14:00-16:00
+   - Indisponibil: Vineri 16:00-18:00
+   - Indisponibil: Vineri 18:00-20:00
+
+C:
+   Constrangeri:-
+
+D:
+   Constrangeri: 
+   - Preferinta: Marti 16:00-18:00
+   - Preferinta: Marti 18:00-20:00
+   - Preferinta: Joi 16:00-18:00
+   - Preferinta: Joi 18:00-20:00
+   - Preferinta: Vineri 8:00-10:00
+   - Preferinta: Vineri 10:00-12:00
+
+E:
+   Constrangeri:
+   - Preferinta: Luni 8:00-10:00
+
+F:
+   Constrangeri: 
+   - Preferinta: Luni 18:00-20:00
+
+Grupe:
+1A:
+    OOP
+1B:
+    Python
+1E:
+    BD, Java
+2A:
+    OOP, Python
+2B:
+    CSSO
+2E:
+    RC, AI
+3A:
+    Java, RC
+3B:
+    Rust, ML
+3E:
+    CSSO, Rust
+
+Sali:
+C2
+C112
+C308
+C309
+
+Zile_saptamana:
+Luni, Marti, Miercuri, Joi, Vineri
+Intervale_orare:
+8:00-10:00, 10:00-12:00, 12:00-14:00, 14:00-16:00, 16:00-18:00, 18:00-20:00
+
+Constrangeri_hard:
+  - Unicitate_sala: Un eveniment (curs/seminar) trebuie să fie unic pentru combinația (zi, interval, sală).
+  - Unicitate_profesor: Un profesor nu poate preda două cursuri simultan.
+  - Unicitate_grupa: O grupă nu poate avea mai multe cursuri simultan.
+Constrangeri_soft:
+  - Maxim_8_ore_studenti: Nu mai mult de 8 ore pe zi pentru fiecare grupă de studenți.
+  - Cursuri_inainte_seminarii: Cursurile trebuie să fie programate înaintea seminariilor.
+
+
