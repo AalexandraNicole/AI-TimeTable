@@ -1,3 +1,5 @@
+import numpy as np
+
 def read_file_timetable(file):
     try:
         with open(file, 'r', encoding='utf-8') as f:
@@ -54,17 +56,13 @@ def read_file_timetable(file):
                     professors[professor]['courses'].append(course_name)
 
             elif current_section == 'professors':
-                if line == 'Profesori:':  # Secțiunea 'Profesori:' este doar un titlu
+                if line == 'Profesori:':
                     continue
-                if line.endswith(':'):  # Numele profesorului este pe o linie separată
+                if line.endswith(':'):
                     current_professor = line.split(':')[0].strip()
-                    if current_professor not in professors:
-                        professors[current_professor] = {'courses': [], 'constraints': []}
-                elif current_professor:
-                    if line.startswith('Constrangeri'):
-                        continue
-                    elif line.startswith('-'):
-                        constraint = line[1:].strip()
+                elif line.strip().startswith("-"):
+                    if 'Indisponibil' in line or 'Preferinta' in line:
+                        constraint = line.strip()[2:]
                         professors[current_professor]['constraints'].append(constraint)
 
             elif current_section == 'classrooms':

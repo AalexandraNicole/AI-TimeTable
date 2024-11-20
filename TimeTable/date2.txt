@@ -16,27 +16,26 @@ SI(3E) - E
 
 Profesori:
 A:
-   Constrangeri:
    - Indisponibil: Luni 8:00-10:00
    - Indisponibil: Luni 10:00-12:00
    - Indisponibil: Luni 12:00-14:00
 
 B:
-   Constrangeri:
    - Preferinta: Luni 8:00-10:00
    - Preferinta: Marti 14:00-16:00
 
 C:
-   Constrangeri:
    - Preferinta: Miercuri 8:00-10:00
    - Preferinta: Joi 10:00-12:00
    - Indisponibil: Vineri 18:00-20:00
 
 D:
-   Constrangeri: -
+    - Preferinta: Luni 16:00-18:00
 
 E:
-   Constrangeri: -
+    - Preferinta: Luni 12:00-14:00
+    - Preferinta: Marti 16:00-18:00
+    - Preferinta: Miercuri 18:00-20:00
 
 Grupe:
 1A:

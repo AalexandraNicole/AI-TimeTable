@@ -33,26 +33,20 @@ BD(2B) - F
 # Profesori
 Profesori:
 A:
-  Constrangeri:
     - Indisponibil: Luni 8:00-10:00
     - Indisponibil: Marti 10:00-12:00
     - Preferinta: Miercuri 8:00-10:00
 B:
-  Constrangeri:
     - Indisponibil: Luni 10:00-12:00
     - Preferinta: Vineri 8:00-10:00
 C:
-  Constrangeri:
     - Indisponibil: Marti 16:00-18:00
 D:
-  Constrangeri:
     - Indisponibil: Luni 10:00-12:00
     - Preferinta: Miercuri 18:00-20:00
 E:
-  Constrangeri:
     - Preferinta: Joi 8:00-10:00
 F:
-  Constrangeri:
     - Indisponibil: Vineri 14:00-16:00
 
 # Săli

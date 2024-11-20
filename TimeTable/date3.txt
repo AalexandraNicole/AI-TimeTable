@@ -17,7 +17,6 @@ CSSO(2B) - F
 
 Profesori:
 A:
-   Constrangeri:
    - Preferinta: Marti 16:00-18:00
    - Preferinta: Marti 18:00-20:00
    - Preferinta: Miercuri 14:00-16:00
@@ -26,7 +25,6 @@ A:
    - Preferinta: Joi 18:00-20:00
 
 B:
-   Constrangeri:
    - Indisponibil: Luni 12:00-14:00
    - Indisponibil: Luni 14:00-16:00
    - Indisponibil: Luni 16:00-18:00
@@ -42,10 +40,9 @@ B:
    - Indisponibil: Vineri 18:00-20:00
 
 C:
-   Constrangeri:-
+   - Preferinta: Luni 8:00-10:00
 
 D:
-   Constrangeri: 
    - Preferinta: Marti 16:00-18:00
    - Preferinta: Marti 18:00-20:00
    - Preferinta: Joi 16:00-18:00
@@ -54,11 +51,9 @@ D:
    - Preferinta: Vineri 10:00-12:00
 
 E:
-   Constrangeri:
    - Preferinta: Luni 8:00-10:00
 
 F:
-   Constrangeri: 
    - Preferinta: Luni 18:00-20:00
 
 Grupe:

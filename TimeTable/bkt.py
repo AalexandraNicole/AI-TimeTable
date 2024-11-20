@@ -22,7 +22,7 @@ def is_assignment_valid(course, professor_index, group, day_index, time_index, r
     # Verificare dacă grupul este deja asignat la un alt curs în același interval orar
     for r in range(len(timetable[day_index][time_index])):
         if timetable[day_index][time_index][r] and f"({group})" in timetable[day_index][time_index][r]:
-            print(f"[DEBUG] Grupul {group} are deja un curs la {day_index} {time_index}")
+            print(f"[DEBUG] Profesorul {group} are deja un curs la {day_index} {time_index}")
             return False
 
     return True
@@ -34,17 +34,13 @@ def backtrack(timetable, remaining_courses, professors, classrooms, zile, interv
     current_course = remaining_courses[0]
     remaining_courses_copy = remaining_courses[1:]
 
-    # Verifică formatul cursului
     if ' (' in current_course:
         course_name, group = current_course.split(' (')
         group = group[:-1]
     else:
-        print(f"[ERROR] Format curs invalid: {current_course}")
+        print(f"[ERROR] Invalid course format: {current_course}")
         return backtrack(timetable, remaining_courses_copy, professors, classrooms, zile, intervale, availability_matrix, professor_indices)
 
-    print(f"[DEBUG] Procesare curs: {current_course} (Grupa: {group})")
-
-    # Iterează prin zile, intervale și săli
     for day_index in range(len(zile)):
         for time_index in range(len(intervale)):
             for room_index, room in enumerate(classrooms):
@@ -56,13 +52,23 @@ def backtrack(timetable, remaining_courses, professors, classrooms, zile, interv
                             timetable[day_index][time_index][room_index] = f"{course_name} ({group}) - {prof}"
                             print(f"[DEBUG] Assigned {course_name} ({group}) - {prof} to {zile[day_index]} {intervale[time_index]} in room {room}")
 
-                            # Apel recursiv pentru restul cursurilor
                             if backtrack(timetable, remaining_courses_copy, professors, classrooms, zile, intervale, availability_matrix, professor_indices):
                                 return True
 
-                            # Backtrack dacă nu s-a găsit o soluție
                             timetable[day_index][time_index][room_index] = ""
                             print(f"[DEBUG] Backtracked on {course_name} ({group}) - {prof} from {zile[day_index]} {intervale[time_index]} in room {room}")
+
+    # Forcefully assign the course if no valid slot is found
+    if not any(timetable[day_index][time_index][room_index] == f"{course_name} ({group}) - {prof}" for day_index in range(len(zile)) for time_index in range(len(intervale)) for room_index, room in enumerate(classrooms) for prof, info in professors.items() if course_name in info['courses']):
+        for day_index in range(len(zile)):
+            for time_index in range(len(intervale)):
+                for room_index, room in enumerate(classrooms):
+                    for prof, info in professors.items():
+                        if course_name in info['courses']:
+                            professor_index = professor_indices[prof]
+                            timetable[day_index][time_index][room_index] = f"{course_name} ({group}) - {prof}"
+                            print(f"[DEBUG] Forcefully assigned {course_name} ({group}) - {prof} to {zile[day_index]} {intervale[time_index]} in room {room}")
+                            return backtrack(timetable, remaining_courses_copy, professors, classrooms, zile, intervale, availability_matrix, professor_indices)
 
     print(f"[DEBUG] Unable to schedule course: {current_course}")
     return False
@@ -92,7 +98,7 @@ def main():
         print("Opțiune invalidă!")
         return
 
-    # Adaugă print pentru a verifica datele citite
+     # Adaugă print pentru a verifica datele citite
     print(f"[DEBUG] Cursuri: {courses}")
     print(f"[DEBUG] Profesori: {professors}")
     print(f"[DEBUG] Săli: {classrooms}")
@@ -106,12 +112,9 @@ def main():
 
     timetable = [[["" for _ in classrooms] for _ in intervale] for _ in zile]
 
-    # Crează un dicționar pentru indexarea profesorilor
     professor_indices = {prof: i for i, prof in enumerate(professors.keys())}
-    print(f"[DEBUG] Indici profesori: {professor_indices}")
-
-    # Crează matricea de disponibilitate a profesorilor
     availability_matrix = np.zeros((len(zile), len(intervale), len(professors)), dtype=int)
+
     for i, (professor, info) in enumerate(professors.items()):
         for constraint in info['constraints']:
             if 'Indisponibil' in constraint:
@@ -126,9 +129,6 @@ def main():
                     print(f"Error: {e}")
                     print(f"Zi '{zi}' nu se găsește în lista zilelor.")
 
-    print(f"[DEBUG] Matr. Disponibilitate Profesori:\n{availability_matrix}")
-
-    # Apelează backtracking-ul pentru a plasa cursurile
     if backtrack(timetable, courses, professors, classrooms, zile, intervale, availability_matrix, professor_indices):
         display_schedule(timetable, zile, intervale, classrooms)
     else:
