@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from ReadFFile import read_file_timetable
 from ReadFPrompt import read_prompt_timetable
 
@@ -22,12 +23,12 @@ def is_assignment_valid(course, professor_index, group, day_index, time_index, r
     # Verificare dacă grupul este deja asignat la un alt curs în același interval orar
     for r in range(len(timetable[day_index][time_index])):
         if timetable[day_index][time_index][r] and f"({group})" in timetable[day_index][time_index][r]:
-            print(f"[DEBUG] Profesorul {group} are deja un curs la {day_index} {time_index}")
+            print(f"[DEBUG] Grupul {group} are deja un curs la {day_index} {time_index}")
             return False
 
     return True
 
-def backtrack(timetable, remaining_courses, professors, classrooms, zile, intervale, availability_matrix, professor_indices):
+def backtrack(timetable, remaining_courses, professors, classrooms, zile, intervale, availability_matrix, professor_indices, preferences):
     if not remaining_courses:
         return True
 
@@ -39,36 +40,39 @@ def backtrack(timetable, remaining_courses, professors, classrooms, zile, interv
         group = group[:-1]
     else:
         print(f"[ERROR] Invalid course format: {current_course}")
-        return backtrack(timetable, remaining_courses_copy, professors, classrooms, zile, intervale, availability_matrix, professor_indices)
+        return backtrack(timetable, remaining_courses_copy, professors, classrooms, zile, intervale, availability_matrix, professor_indices, preferences)
 
-    for day_index in range(len(zile)):
-        for time_index in range(len(intervale)):
-            for room_index, room in enumerate(classrooms):
-                for prof, info in professors.items():
-                    if course_name in info['courses']:
-                        professor_index = professor_indices[prof]
+    for prof, info in professors.items():
+        if course_name in info['courses']:
+            professor_index = professor_indices[prof]
 
+            # Try preferred time slots first
+            if prof in preferences:
+                for day_index, time_index in preferences[prof]:
+                    for room_index, room in enumerate(classrooms):
                         if is_assignment_valid(course_name, professor_index, group, day_index, time_index, room_index, timetable, availability_matrix):
                             timetable[day_index][time_index][room_index] = f"{course_name} ({group}) - {prof}"
                             print(f"[DEBUG] Assigned {course_name} ({group}) - {prof} to {zile[day_index]} {intervale[time_index]} in room {room}")
 
-                            if backtrack(timetable, remaining_courses_copy, professors, classrooms, zile, intervale, availability_matrix, professor_indices):
+                            if backtrack(timetable, remaining_courses_copy, professors, classrooms, zile, intervale, availability_matrix, professor_indices, preferences):
                                 return True
 
                             timetable[day_index][time_index][room_index] = ""
                             print(f"[DEBUG] Backtracked on {course_name} ({group}) - {prof} from {zile[day_index]} {intervale[time_index]} in room {room}")
 
-    # Forcefully assign the course if no valid slot is found
-    if not any(timetable[day_index][time_index][room_index] == f"{course_name} ({group}) - {prof}" for day_index in range(len(zile)) for time_index in range(len(intervale)) for room_index, room in enumerate(classrooms) for prof, info in professors.items() if course_name in info['courses']):
-        for day_index in range(len(zile)):
-            for time_index in range(len(intervale)):
-                for room_index, room in enumerate(classrooms):
-                    for prof, info in professors.items():
-                        if course_name in info['courses']:
-                            professor_index = professor_indices[prof]
+            # Try all other time slots
+            for day_index in range(len(zile)):
+                for time_index in range(len(intervale)):
+                    for room_index, room in enumerate(classrooms):
+                        if is_assignment_valid(course_name, professor_index, group, day_index, time_index, room_index, timetable, availability_matrix):
                             timetable[day_index][time_index][room_index] = f"{course_name} ({group}) - {prof}"
-                            print(f"[DEBUG] Forcefully assigned {course_name} ({group}) - {prof} to {zile[day_index]} {intervale[time_index]} in room {room}")
-                            return backtrack(timetable, remaining_courses_copy, professors, classrooms, zile, intervale, availability_matrix, professor_indices)
+                            print(f"[DEBUG] Assigned {course_name} ({group}) - {prof} to {zile[day_index]} {intervale[time_index]} in room {room}")
+
+                            if backtrack(timetable, remaining_courses_copy, professors, classrooms, zile, intervale, availability_matrix, professor_indices, preferences):
+                                return True
+
+                            timetable[day_index][time_index][room_index] = ""
+                            print(f"[DEBUG] Backtracked on {course_name} ({group}) - {prof} from {zile[day_index]} {intervale[time_index]} in room {room}")
 
     print(f"[DEBUG] Unable to schedule course: {current_course}")
     return False
@@ -98,7 +102,7 @@ def main():
         print("Opțiune invalidă!")
         return
 
-     # Adaugă print pentru a verifica datele citite
+    # Adaugă print pentru a verifica datele citite
     print(f"[DEBUG] Cursuri: {courses}")
     print(f"[DEBUG] Profesori: {professors}")
     print(f"[DEBUG] Săli: {classrooms}")
@@ -114,6 +118,7 @@ def main():
 
     professor_indices = {prof: i for i, prof in enumerate(professors.keys())}
     availability_matrix = np.zeros((len(zile), len(intervale), len(professors)), dtype=int)
+    preferences = {}
 
     for i, (professor, info) in enumerate(professors.items()):
         for constraint in info['constraints']:
@@ -128,12 +133,31 @@ def main():
                 except ValueError as e:
                     print(f"Error: {e}")
                     print(f"Zi '{zi}' nu se găsește în lista zilelor.")
+            elif 'Preferinta' in constraint:
+                parts = constraint.split(' ')
+                zi = parts[1].strip()
+                interval = ' '.join(parts[2:]).strip()
+                try:
+                    zi_index = zile.index(zi)
+                    interval_index = intervale.index(interval)
+                    if professor not in preferences:
+                        preferences[professor] = []
+                    preferences[professor].append((zi_index, interval_index))
+                except ValueError as e:
+                    print(f"Error: {e}")
+                    print(f"Zi '{zi}' nu se găsește în lista zilelor.")
 
-    if backtrack(timetable, courses, professors, classrooms, zile, intervale, availability_matrix, professor_indices):
+    start_time = time.time_ns()  # Record the start time in nanoseconds
+
+    if backtrack(timetable, courses, professors, classrooms, zile, intervale, availability_matrix, professor_indices, preferences):
         display_schedule(timetable, zile, intervale, classrooms)
     else:
         print("Nu a fost găsită o soluție validă.")
         display_schedule(timetable, zile, intervale, classrooms)
+
+    end_time = time.time_ns()  # Record the end time in nanoseconds
+    elapsed_time = (end_time - start_time) / 1_000_000  # Calculate the elapsed time in milliseconds
+    print(f"Timpul de execuție: {elapsed_time:.2f} milisecunde")  # Display the elapsed time in milliseconds
 
 if __name__ == "__main__":
     main()
