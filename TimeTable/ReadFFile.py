@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def read_file_timetable(file):
     try:
         with open(file, 'r', encoding='utf-8') as f:

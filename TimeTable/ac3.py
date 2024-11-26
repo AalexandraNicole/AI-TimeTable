@@ -1,7 +1,7 @@
+import numpy as np
+from collections import deque
 from ReadFFile import read_file_timetable
 from ReadFPrompt import read_prompt_timetable
-from collections import deque
-import numpy as np
 
 
 def initialize_csp(courses, classrooms, days, time_slots):
@@ -13,7 +13,6 @@ def initialize_csp(courses, classrooms, days, time_slots):
         'arcs': []
     }
 
-    # Generez arcele și lista vecinilor pentru fiecare curs
     for xi in courses:
         csp['neighbors'][xi] = [xj for xj in courses if xj != xi]
         for xj in courses:
@@ -22,7 +21,6 @@ def initialize_csp(courses, classrooms, days, time_slots):
 
 
 def satisfies_constraint(x, y, xi, xj, constraints):
-    # Verific dacă 2 valori ale anumitor variabile respectă toate constrângerile pentru variabilele xi și xj
     for constraint in constraints.get((xi, xj), []):
         if not constraint(x, y):
             return False
@@ -32,7 +30,7 @@ def satisfies_constraint(x, y, xi, xj, constraints):
 def remove_inconsistent_values(csp, xi, xj):
     removed = False
 
-    for x in csp['domains'][xi][:]:  # Iterez printr-o copie a domeniului
+    for x in csp['domains'][xi]:
         consistent_found = False
         for y in csp['domains'][xj]:
             if satisfies_constraint(x, y, xi, xj, csp['constraints']):
@@ -41,95 +39,112 @@ def remove_inconsistent_values(csp, xi, xj):
 
         if not consistent_found:
             print(
-                f"[DEBUG] Elimin valoarea {x} din domeniul lui {xi} pentru că nu am găsit nicio valoare consistentă în domeniul lui {xj}")
+                f"[DEBUG] Elimin valoarea {x} din domeniul lui {xi} pentru ca nu am gasit nicio valoare consistenta in domeniul lui {xj}")
             csp['domains'][xi].remove(x)
             removed = True
 
     return removed
 
 
-def AC3(csp):
-    # Aplic algoritmul AC3 pentru a reduce domeniile variabilelor prin eliminarea valorilor inconsistente
+def ac3(csp):
     queue = deque(csp['arcs'])
-    print(f"[DEBUG] Arcele inițiale în coadă: {queue}")
+    print(f"[DEBUG] Arcele initiale in coada: {queue}")
 
     while queue:
         xi, xj = queue.popleft()
-        print(f"Se prelucrează arcul ({xi},{xj})")
+        # print(f"Se prelucreaza arcul ({xi},{xj})")
         if remove_inconsistent_values(csp, xi, xj):
-            # Adăugăm în coadă toate arcele (xk, xi), unde xk sunt vecinii lui xi
             for xk in csp['neighbors'][xi]:
                 if xk != xj:
                     queue.append((xk, xi))
 
 
-def display_schedule_from_ac3(csp, zile, intervale, classrooms):
-    print("\nOrarul rezultat din AC-3:")
-    timetable = [[["" for _ in classrooms] for _ in intervale] for _ in zile]
-
+def get_domains_string(csp, zile, intervale, classrooms):
+    result = ""
     for course, domain in csp['domains'].items():
-        if len(domain) == 1:  # Dacă domeniul are o singură valoare, cursul poate fi programat
-            day_idx, time_idx, room_idx = domain[0]
-            timetable[day_idx][time_idx][room_idx] = course
-        elif len(domain) > 1:
-            print(f"[WARN] Domeniul pentru {course} nu este unic: {domain}")
-        else:
-            print(f"[ERROR] Domeniul pentru {course} este gol!")
-
-    for day_idx, day in enumerate(zile):
-        print(f"\n{day}:")
-        for time_idx, interval in enumerate(intervale):
-            print(f"  {interval}:")
-            for room_idx, room in enumerate(classrooms):
-                event = timetable[day_idx][time_idx][room_idx]
-                if event:
-                    print(f"    {room}: {event}")
-                else:
-                    print(f"    {room}: -")
+        result += f"Domain of {course}:\n"
+        formatted_domain = format_domain(domain, zile, intervale, classrooms)
+        for entry in formatted_domain:
+            result += f"  - {entry}\n"
+        result += "\n"  # Adding a line break after each course's domain
+    return result
 
 
-def main():
-    print("Introduceți metoda de citire a datelor de intrare")
-    choice = input("Citire prompt (1) Citire fișier (2):  ")
-    if choice == "1":
-        courses, professors, classrooms, groups, constraints, week_days, time_slots = read_prompt_timetable()
-    elif choice == "2":
-        file_name = input("Introduceți numele fișierului de intrare: ")
-        courses, professors, classrooms, groups, constraints, week_days, time_slots = read_file_timetable(file_name)
-    else:
-        print("Opțiune invalidă!")
-        return
+def format_domain(domain, zile, intervale, classrooms):
+    formatted_domain = []
+    for day_idx, time_idx, room_idx in domain:
+        day = zile[day_idx]
+        time = intervale[time_idx]
+        room = classrooms[room_idx]
+        formatted_domain.append(f"{day} {time} (Room {room})")
+    return formatted_domain
 
-    # Valorile implicite dacă zilele sau intervalele nu sunt furnizate
+
+def print_domains(csp, zile, intervale, classrooms):
+    for course, domain in csp['domains'].items():
+        print(f"Domain of {course}:")
+        formatted_domain = format_domain(domain, zile, intervale, classrooms)
+        for entry in formatted_domain:
+            print(f"  - {entry}")
+        print()
+
+
+def main(courses, professors, classrooms, constraints, week_days, time_slots, file_name=None):
     zile = week_days if week_days else ['Luni', 'Marti', 'Miercuri', 'Joi', 'Vineri']
     intervale = time_slots if time_slots else ['8:00-10:00', '10:00-12:00', '12:00-14:00', '14:00-16:00', '16:00-18:00',
                                                '18:00-20:00']
 
-    classrooms_indices = list(range(len(classrooms)))
-    zile_indices = list(range(len(zile)))
-    intervale_indices = list(range(len(intervale)))
+    timetable = [[["" for _ in classrooms] for _ in intervale] for _ in zile]
+    professor_indices = {prof: i for i, prof in enumerate(professors.keys())}
+    availability = np.zeros((len(zile), len(intervale), len(professors)), dtype=int)
 
-    # Initializare CSP
-    csp = initialize_csp(courses, classrooms_indices, zile_indices, intervale_indices)
-
-    # Procesare constrângeri din input
-    for group, group_courses in groups.items():
-        for course1 in group_courses:
-            for course2 in group_courses:
-                if course1 != course2:
-                    csp['constraints'].setdefault((course1, course2), []).append(lambda x, y: x != y)
-
+    preferences = {}
     for prof, info in professors.items():
-        for course1 in info['courses']:
-            for course2 in info['courses']:
-                if course1 != course2:
-                    csp['constraints'].setdefault((course1, course2), []).append(lambda x, y: x != y)
+        for constraint in info['constraints']:
+            if 'Indisponibil' in constraint:
+                parts = constraint.split(' ')
+                zi = parts[1]
+                interval = ' '.join(parts[2:])
+                zi_idx = zile.index(zi)
+                interval_idx = intervale.index(interval)
+                availability[zi_idx][interval_idx][professor_indices[prof]] = 1
+            elif 'Preferinta' in constraint:
+                parts = constraint.split(' ')
+                zi = parts[1]
+                interval = ' '.join(parts[2:])
+                zi_idx = zile.index(zi)
+                interval_idx = intervale.index(interval)
+                preferences.setdefault(prof, []).append((zi_idx, interval_idx))
 
-    # Aplicarea AC-3
-    AC3(csp)
+    csp = initialize_csp(courses, list(range(len(classrooms))), list(range(len(zile))), list(range(len(intervale))))
 
-    # Afisarea orarului rezultat
-    display_schedule_from_ac3(csp, zile, intervale, classrooms)
+    for constraint in constraints:
+        if constraint == 'Unicitate_sala':
+            csp['constraints']['unique_room'] = True
+        elif constraint == 'Unicitate_profesor':
+            csp['constraints']['unique_professor'] = True
+        elif constraint == 'Unicitate_grupa':
+            csp['constraints']['unique_group'] = True
+        elif constraint == 'Maxim_8_ore_studenti':
+            csp['constraints']['max_hours'] = 8
+        elif constraint == 'Cursuri_inainte_seminarii':
+            csp['constraints']['course_before_seminar'] = True
+
+    ac3(csp)
+
+    # Instead of printing, we return the string
+    return get_domains_string(csp, zile, intervale, classrooms)
+
+
+def run_main_from_gui(choice, file_name=None):
+    if choice == "1":
+        courses, professors, classrooms, groups, constraints, week_days, time_slots = read_prompt_timetable()
+        return main(courses, professors, classrooms, constraints, week_days, time_slots)
+    elif choice == "2" and file_name:
+        courses, professors, classrooms, groups, constraints, week_days, time_slots = read_file_timetable(file_name)
+        return main(courses, professors, classrooms, constraints, week_days, time_slots, file_name)
+    else:
+        return "Optiune invalida!"
 
 
 if __name__ == "__main__":
