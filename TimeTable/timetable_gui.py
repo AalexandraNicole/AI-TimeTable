@@ -13,7 +13,6 @@ def display_schedule_window_per_room(schedule, week_days, time_slots, classrooms
     main_window.title("Alege sala pentru a vizualiza orarul")
     main_window.geometry("400x400")
 
-    # Funcție care creează fereastra cu orarul pentru o sală specifică
     def show_room_schedule(room_idx):
         classroom = classrooms[room_idx]
         schedule_window = tk.Toplevel()
@@ -22,22 +21,22 @@ def display_schedule_window_per_room(schedule, week_days, time_slots, classrooms
         # Adaugă zilele săptămânii pe prima linie
         for col, day in enumerate(week_days):
             label = tk.Label(schedule_window, text=day, relief="solid", width=20, height=2, font=('Arial', 12))
-            label.grid(row=0, column=col + 1)  # +1 pentru a lăsa colțul liber pentru intervalele orare
+            label.grid(row=0, column=col + 1)
 
         # Adaugă intervalele orare pe prima coloană
         for row, time in enumerate(time_slots):
             label = tk.Label(schedule_window, text=time, relief="solid", width=20, height=2, font=('Arial', 12))
-            label.grid(row=row + 1, column=0)  # +1 pentru a lăsa linia liberă pentru zile
+            label.grid(row=row + 1, column=0)
 
         # Umple celulele orarului pentru sala selectată
         for day_idx, day in enumerate(week_days):
             for time_idx, time in enumerate(time_slots):
-                event = schedule[day_idx][time_idx][room_idx]
-                if event:  # Dacă există un eveniment, afișează-l
-                    label = tk.Label(schedule_window, text=event, relief="solid", width=20, height=2, bg="lightgreen", 
+                event = schedule[day_idx][time_idx][room_idx]  # Accessing the 3D timetable matrix
+                if event:  # If there's an event, display it
+                    label = tk.Label(schedule_window, text=event, relief="solid", width=20, height=2, bg="lightgreen",
                                      font=('Arial', 12))
                     label.grid(row=time_idx + 1, column=day_idx + 1)
-                else:  # Dacă nu există niciun eveniment, lasă celula goală
+                else:  # If there's no event, show a placeholder
                     label = tk.Label(schedule_window, text="-", relief="solid", width=20, height=2, font=('Arial', 12))
                     label.grid(row=time_idx + 1, column=day_idx + 1)
 
@@ -152,11 +151,11 @@ def on_submit():
         display_schedule_window_per_teacher(schedule, week_days, time_slots, list(professors.keys()), classrooms)
 
     # Butoane pentru alegerea între sală și profesor
-    room_button = tk.Button(choice_window, text="Vezi orarul pentru săli", command=show_room_schedule, 
+    room_button = tk.Button(choice_window, text="Vezi orarul pentru săli", command=show_room_schedule,
                             font=('Arial', 14))
     room_button.pack(pady=10)
 
-    teacher_button = tk.Button(choice_window, text="Vezi orarul pentru profesori", command=show_teacher_schedule, 
+    teacher_button = tk.Button(choice_window, text="Vezi orarul pentru profesori", command=show_teacher_schedule,
                                font=('Arial', 14))
     teacher_button.pack(pady=10)
 
