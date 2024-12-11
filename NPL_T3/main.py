@@ -1,41 +1,47 @@
+import random
 import nltk
+from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.corpus import wordnet as wn
 from langdetect import detect
 from nltk.probability import FreqDist
-import random
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.corpus import stopwords
 
-nltk.download('punkt')
-nltk.download('wordnet')
-nltk.download('omw-1.4')
-
-
+# Citește un fișier și returnează conținutul acestuia
 def read_file_into_string(filename):
     with open(f'{filename}.txt', 'r', encoding='utf-8') as f:
         return f.read()
 
+# Înlocuiește cuvinte cu sinonime, hipernime sau antonime negate
+def replace_with_synonyms_or_hypernyms(text, replacement_rate=0.2, lang=None):
+    if lang is None:
+        # Detectează limba dacă nu este furnizată
+        lang = detect(text)
 
-def replace_with_synonyms_or_hypernyms(text, replacement_rate=0.2):
-    """Înlocuiește cel puțin 20% din cuvintele textului cu sinonime, hipernime sau antonime negate."""
     tokens = nltk.word_tokenize(text)
     new_tokens = []
+
+    # Setează cuvântul pentru negare în funcție de limbă
+    negation_word = 'nu' if lang == 'ro' else 'not'
 
     for token in tokens:
         if random.random() > replacement_rate or not token.isalpha():
             new_tokens.append(token)
             continue
 
-        synosets = wn.synsets(token)
+        synosets = wn.synsets(token, lang=lang)
         if synosets:
             # Sinonime
-            synonyms = set(lemma.name().replace('_', ' ') for synset in synosets for lemma in synset.lemmas() if lemma.name().lower() != token.lower())
-
+            synonyms = set(lemma.name().replace('_', ' ') for synset in synosets for lemma in synset.lemmas(lang) if
+                           lemma.name().lower() != token.lower())
             # Hipernime
-            hypernyms = set(hypernym.name().split('.')[0].replace('_', ' ') for synset in synosets for hypernym in synset.hypernyms())
-
+            hypernyms = set(hypernym.name().split('.')[0].replace('_', ' ') for synset in synosets for hypernym in
+                            synset.hypernyms())
             # Antonyme negate
-            antonyms = set("nu " + ant.name().replace('_', ' ') for synset in synosets for lemma in synset.lemmas() for ant in lemma.antonyms())
+            antonyms = set(
+                f"{negation_word} " + ant.name().replace('_', ' ') for synset in synosets for lemma in synset.lemmas(lang) for ant in
+                lemma.antonyms())
 
-            # Alegerea unui înlocuitor disponibil
             replacements = list(synonyms | hypernyms | antonyms)
             if replacements:
                 new_tokens.append(random.choice(replacements))
@@ -44,72 +50,95 @@ def replace_with_synonyms_or_hypernyms(text, replacement_rate=0.2):
         else:
             new_tokens.append(token)
 
-    # Asigurarea unei rate minime de înlocuire
-    if len(new_tokens) > 0 and len(new_tokens) - len(tokens) < replacement_rate * len(tokens):
-        additional_replacements = int(replacement_rate * len(tokens) - (len(new_tokens) - len(tokens)))
-        indices = [i for i, token in enumerate(tokens) if token.isalpha() and new_tokens[i] == token]
-        random.shuffle(indices)
-        for i in indices[:additional_replacements]:
-            synosets = wn.synsets(tokens[i])
-            if synosets:
-                synonyms = set(lemma.name().replace('_', ' ') for synset in synosets for lemma in synset.lemmas() if lemma.name().lower() != tokens[i].lower())
-                hypernyms = set(hypernym.name().split('.')[0].replace('_', ' ') for synset in synosets for hypernym in synset.hypernyms())
-                antonyms = set("nu " + ant.name().replace('_', ' ') for synset in synosets for lemma in synset.lemmas() for ant in lemma.antonyms())
-                replacements = list(synonyms | hypernyms | antonyms)
-                if replacements:
-                    new_tokens[i] = random.choice(replacements)
-
     return ' '.join(new_tokens)
 
-def analyze_text(text):
-    # detectarea limbii
-    try:
-        language = detect(text)
-    except Exception as e:
-        language = "Limba nedetectata: " + str(e)
-
-    # tokenizare
+# Analiza stilometrică
+def stylometric_analysis(text):
     tokens = nltk.word_tokenize(text)
     words = [token for token in tokens if token.isalpha()]
-
-    # calculam innformatiile stilometrice
     num_chars = len(text)
     num_words = len(words)
     num_unique_words = len(set(words))
     freq_dist = FreqDist(words)
 
-    # Afișarea rezultatelor
-    print("\nInformații despre text:")
-    print(f"Limbă detectată: {language}")
-    print(f"Număr de caractere: {num_chars}")
-    print(f"Număr de cuvinte: {num_words}")
-    print(f"Număr de cuvinte unice: {num_unique_words}")
-    print("\nFrecvența celor mai comune 10 cuvinte:")
+    result = []
+    result.append(f"Lungime în caractere: {num_chars}")
+    result.append(f"Lungime în cuvinte: {num_words}")
+    result.append(f"Număr de cuvinte unice: {num_unique_words}")
+    result.append("\nFrecvența celor mai comune 10 cuvinte:")
     for word, freq in freq_dist.most_common(10):
-        print(f"{word}: {freq}")
+        result.append(f"{word}: {freq}")
 
+    return '\n'.join(result)
 
+# Extrage cuvintele cheie și generează propozițiile asociate
+def extract_keywords_and_generate_sentences(text, num_keywords=5, lang='ron'):
+    sentences = sent_tokenize(text)
+    stop_words = stopwords.words('english')
+    vectorizer = TfidfVectorizer(stop_words=stop_words, max_features=num_keywords)
+    tfidf_matrix = vectorizer.fit_transform(sentences)
+
+    keywords = vectorizer.get_feature_names_out()
+    keyword_sentences = {}
+
+    for keyword in keywords:
+        for sentence in sentences:
+            if keyword.lower() in sentence.lower():
+                keyword_sentences[keyword] = sentence
+                break
+
+    result = []
+    for keyword, sentence in keyword_sentences.items():
+        words = word_tokenize(sentence)
+        words_filtered = [word for word in words if word.isalpha()]
+        random_words = random.sample(words_filtered, min(5, len(words_filtered)))
+        random_index = random.randint(0, len(random_words))
+        random_words.insert(random_index, keyword)
+        new_sentence = ' '.join(random_words)
+        result.append(f"Cuvânt cheie: {keyword}")
+        result.append(f"Propoziție: {new_sentence}")
+
+    return '\n'.join(result)
+
+# Funcția principală
 def main():
-    choice = input("Doriti sa introduceti textul de la prompt (1) sau din fisier (2): ")
+    choice = input("Doriți să introduceți textul de la prompt (1) sau din fișier (2): ")
     if choice == '1':
-        text = input("Introdueti textul si apasati Enter: \n")
+        text = input("Introduceți textul și apăsați Enter: \n")
     elif choice == '2':
-        filename = input("Introduceti numele fisierului (fara extensie): ")
+        filename = input("Introduceți numele fișierului (fără extensie): ")
         try:
             text = read_file_into_string(filename)
         except FileNotFoundError:
-            print("Fisierul nu a fost gasit!")
+            print("Fișierul nu a fost găsit!")
             return
     else:
         print("Opțiune invalidă!")
         return
 
-    print("\nText modificat:")
-    modified_text = replace_with_synonyms_or_hypernyms(text)
+    # Detectare limbă
+    try:
+        language = detect(text)
+        print(f"\nLimbă detectată: {language}")
+    except Exception as e:
+        print(f"\nEroare la detectarea limbii: {e}")
+        return
+
+    # Schimbă limba în funcție de detectarea limbii
+    lang = 'ron' if language == 'ro' else 'eng'
+
+    # Analiza stilometrică
+    print("\nInformații stilometrice:")
+    print(stylometric_analysis(text))
+
+    # Generare text alternativ
+    print("\nText alternativ:")
+    modified_text = replace_with_synonyms_or_hypernyms(text, lang=lang)
     print(modified_text)
 
-    analyze_text(text)
-
+    # Extrage cuvintele cheie și generează propoziții
+    print("\nCuvinte cheie și propoziții asociate:")
+    print(extract_keywords_and_generate_sentences(text, lang=lang))
 
 if __name__ == "__main__":
     main()

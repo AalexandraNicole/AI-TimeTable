@@ -1,4 +1,4 @@
-Tradițional, un driver este o componentă software ce permite comunicarea între sistemul
+Tradițional, obiectul driver este o componentă software ce permite comunicarea între sistemul
 de operare și un dispozitiv, facilitând transferul de date între aplicație și hardware prin
 intermediul sistemului de operare. Driverul, este dezvoltat, de obicei, de producătorul
 dispozitivului.
