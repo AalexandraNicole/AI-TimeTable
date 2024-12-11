@@ -100,9 +100,4 @@ def run_with_gui():
             formatted_domain.append(f"{day} {time} (Room {room})")
         return formatted_domain
 
-    # Rulare aplicație
-    root.mainloop()
 
-
-if __name__ == "__main__":
-    run_with_gui()

@@ -5,6 +5,7 @@ import numpy as np  # Asigură-te că numpy este importat
 from timetable import run_scheduler
 from read_f_file import read_file_timetable
 from read_f_prompt import read_prompt_timetable
+from interfata_ac3 import run_with_gui
 
 
 # Funcția care va genera orarul pentru fiecare sală într-o fereastră separată
@@ -142,7 +143,7 @@ def on_submit():
     # Afișează o fereastră care întreabă dacă vrei să vezi orarul pentru sali sau profesori
     choice_window = tk.Toplevel()
     choice_window.title("Alege opțiunea")
-    choice_window.geometry("400x200")
+    choice_window.geometry("400x400")
 
     def show_room_schedule():
         display_schedule_window_per_room(schedule, week_days, time_slots, classrooms)
@@ -161,14 +162,35 @@ def on_submit():
                                font=('Arial', 16))
     teacher_button.pack(pady=10)
 
+    # Buton pentru detalii
+    title_label1 = tk.Label(choice_window, text="Sau vezi detalii", font=("Arial", 16))
+    title_label1.pack(pady=50)
+    details_button = tk.Button(choice_window, text="Detalii", command=...,
+                               font=('Arial', 16))
+    details_button.pack(pady=10)
+
 
 def show_options():
     # Afișează opțiunile în aceeași fereastră
-    options_label.pack(pady=10)
+    back_button.place(x=0, y=0, width=25, height=25)
+    options_label.pack(pady=30)
     prompt_radio.pack(anchor=tk.W)
     file_radio.pack(anchor=tk.W)
     start_button.pack(pady=20)
     submit_button.pack_forget()  # Ascunde butonul „Generează Orar”
+    ac3_button.pack_forget()
+    title_label.pack_forget()
+
+
+def principal_gui():
+    back_button.place_forget()
+    options_label.pack_forget()
+    prompt_radio.pack_forget()
+    file_radio.pack_forget()
+    start_button.pack_forget()
+    title_label.pack(pady=30)
+    submit_button.pack(pady=20)
+    ac3_button.pack(pady=0)
 
 
 # Interfața principală
@@ -179,16 +201,21 @@ root.geometry("400x400")
 method_var = tk.IntVar()
 
 title_label = tk.Label(root, text="Timetable Scheduler", font=("Arial", 22))
-title_label.pack(pady=10)
+title_label.pack(pady=30)
 
 # Elemente pentru opțiuni
-options_label = tk.Label(root, text="Selectează metoda de citire:", font=("Arial", 16))
-prompt_radio = tk.Radiobutton(root, text="Citire Prompt", variable=method_var, value=1, font=('Arial', 12))
-file_radio = tk.Radiobutton(root, text="Citire Fișier", variable=method_var, value=2, font=('Arial', 12))
+back_button = tk.Button(root, text="<", command=principal_gui, font=('Arial', 14))
+options_label = tk.Label(root, text="Selectează metoda de citire:", font=("Arial", 18))
+prompt_radio = tk.Radiobutton(root, text="Citire Prompt", variable=method_var, value=1, font=('Arial', 14))
+file_radio = tk.Radiobutton(root, text="Citire Fișier", variable=method_var, value=2, font=('Arial', 14))
 start_button = tk.Button(root, text="Start", command=on_submit, font=('Arial', 18))
 
 # Butonul pentru generare orar
 submit_button = tk.Button(root, text="Generează Orar", command=show_options, font=('Arial', 18))
 submit_button.pack(pady=20)
+
+# Butonul pentru afișarea de detalii
+ac3_button = tk.Button(root, text="AC3", command=run_with_gui, font=('Arial', 18))
+ac3_button.pack(pady=0)
 
 root.mainloop()
