@@ -29,6 +29,116 @@ AI(3A) - F
 AI(3B) - F
 AI(3E) - F
 BD(2B) - F
+IMR(4A) - G
+IMR(4B) - G
+IMR(4E) - G
+IMR(4F) - G
+AI(4A) - H
+AI(4B) - H
+AI(4E) - H
+AI(4F) - H
+RN(4A) - I
+RN(4B) - I
+RN(4E) - I
+RN(4F) - I
+NET(4A) - J
+NET(4B) - J
+NET(4E) - J
+NET(4F) - J
+AD(4A) - K
+AD(4B) - K
+AD(4E) - K
+AD(4F) - K
+DSFUM(4A) - L
+DSFUM(4B) - L
+DSFUM(4E) - L
+DSFUM(4F) - L
+TPM(4A) - M
+TPM(4B) - M
+TPM(4E) - M
+TPM(4F) - M
+TMP(4A) - N
+TMP(4B) - N
+TMP(4E) - N
+TMP(4F) - N
+HCI(4A) - O
+HCI(4B) - O
+HCI(4E) - O
+HCI(4F) - O
+ARMS(4A) - P
+ARMS(4B) - P
+ARMS(4E) - P
+ARMS(4F) - P
+IMR(5A) - G
+IMR(5B) - G
+IMR(5E) - G
+IMR(5F) - G
+AI(5A) - H
+AI(5B) - H
+AI(5E) - H
+AI(5F) - H
+RN(5A) - I
+RN(5B) - I
+RN(5E) - I
+RN(5F) - I
+NET(5A) - J
+NET(5B) - J
+NET(5E) - J
+NET(5F) - J
+AD(5A) - K
+AD(5B) - K
+AD(5E) - K
+AD(5F) - K
+DSFUM(5A) - L
+DSFUM(5B) - L
+DSFUM(5E) - L
+DSFUM(5F) - L
+TPM(5A) - M
+TPM(5B) - M
+TPM(5E) - M
+TPM(5F) - M
+TMP(5A) - N
+TMP(5B) - N
+TMP(5E) - N
+TMP(5F) - N
+HCI(5A) - O
+HCI(5B) - O
+HCI(5E) - O
+HCI(5F) - O
+ARMS(5A) - P
+ARMS(5B) - P
+ARMS(5E) - P
+ARMS(5F) - P
+ARMS(1A) - A
+ARMS(1B) - A
+ARMS(1E) - A
+HCI(2A) - B
+HCI(2B) - B
+HCI(2E) - B
+DSFUM(3A) - C
+DSFUM(3B) - C
+DSFUM(3E) - C
+HCI(1A) - B
+HCI(1B) - B
+HCI(1E) - B
+ARMS(2A) - A
+ARMS(2B) - A
+ARMS(2E) - A
+PJ(1A) - F
+PJ(1B) - F
+PJ(1E) - F
+IOT(1A) - A
+IOT(1B) - A
+IOT(1E) - A
+LI(2A) - B
+LI(2B) - B
+LI(2E) - B
+CN(3A) - C
+CN(3B) - C
+CN(3E) - C
+GR(1A) - F
+GR(1B) - F
+GR(1E) - F
 
 # Profesori
 Profesori:
@@ -48,6 +158,37 @@ E:
     - Preferinta: Joi 8:00-10:00
 F:
     - Indisponibil: Vineri 14:00-16:00
+G:
+    - Indisponibil: Luni 8:00-10:00
+    - Indisponibil: Marti 10:00-12:00
+    - Preferinta: Miercuri 8:00-10:00
+H:
+    - Indisponibil: Luni 10:00-12:00
+    - Preferinta: Miercuri 18:00-20:00
+I:
+    - Preferinta: Joi 8:00-10:00
+J:
+    - Indisponibil: Vineri 14:00-16:00
+K:
+    - Indisponibil: Luni 10:00-12:00
+    - Preferinta: Vineri 8:00-10:00
+L:
+    - Indisponibil: Luni 8:00-10:00
+    - Indisponibil: Marti 10:00-12:00
+    - Preferinta: Miercuri 8:00-10:00
+M:
+    - Indisponibil: Luni 10:00-12:00
+    - Preferinta: Miercuri 18:00-20:00
+N:
+    - Indisponibil: Luni 10:00-12:00
+    - Preferinta: Vineri 8:00-10:00
+O:
+    - Indisponibil: Luni 8:00-10:00
+    - Indisponibil: Marti 10:00-12:00
+    - Preferinta: Miercuri 8:00-10:00
+P:
+    - Indisponibil: Luni 10:00-12:00
+    - Preferinta: Miercuri 18:00-20:00
 
 # Săli
 Sali:
@@ -60,23 +201,39 @@ C909
 # Grupe
 Grupe:
 1A:
-  SD, RC, Mate
+  SD, RC, Mate, ARMS, HCI, PJ, IOT, GR
 1B:
-   BD, Mate, SD
+   BD, Mate, SD, ARMS, HCI, PJ, IOT, GR
 1E:
-   SD, Logica
+   SD, Logica, ARMS, HCI, PJ, IOT, GR
 2A:
-   RC, AI, BD
+   RC, AI, BD, HCI, ARMS, LI
 2B:
-   RC, BD, SI
+   RC, BD, SI, HCI, ARMS, LI
 2E:
-   SI, AI, ML
+   SI, AI, ML, HCI, ARMS, LI
 3A:
-   Logica, AI, ML, SI
+   Logica, AI, ML, SI, DSFUM, CN
 3B:
-   ML, AI, IMR, SI
+   ML, AI, IMR, SI, DSFUM, CN
 3E:
-   IMR, ML, SI, AI
+   IMR, ML, SI, AI, DSFUM, CN
+4A:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
+4B:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
+4E:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
+4F:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
+5A:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
+5B:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
+5E:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
+5F:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
 
 # Intervale de timp
 Zile_saptamana:

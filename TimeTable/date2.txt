@@ -13,6 +13,46 @@ AI(3A) - D
 SI(3A) - E
 SI(3B) - E
 SI(3E) - E
+IMR(4A) - G
+IMR(4B) - G
+IMR(4E) - G
+IMR(4F) - G
+AI(4A) - H
+AI(4B) - H
+AI(4E) - H
+AI(4F) - H
+RN(4A) - I
+RN(4B) - I
+RN(4E) - I
+RN(4F) - I
+NET(4A) - J
+NET(4B) - J
+NET(4E) - J
+NET(4F) - J
+AD(4A) - K
+AD(4B) - K
+AD(4E) - K
+AD(4F) - K
+DSFUM(4A) - L
+DSFUM(4B) - L
+DSFUM(4E) - L
+DSFUM(4F) - L
+TPM(4A) - M
+TPM(4B) - M
+TPM(4E) - M
+TPM(4F) - M
+TMP(4A) - N
+TMP(4B) - N
+TMP(4E) - N
+TMP(4F) - N
+HCI(4A) - O
+HCI(4B) - O
+HCI(4E) - O
+HCI(4F) - O
+ARMS(4A) - P
+ARMS(4B) - P
+ARMS(4E) - P
+ARMS(4F) - P
 
 Profesori:
 A:
@@ -36,6 +76,37 @@ E:
     - Preferinta: Luni 12:00-14:00
     - Preferinta: Marti 16:00-18:00
     - Preferinta: Miercuri 18:00-20:00
+G:
+    - Indisponibil: Luni 8:00-10:00
+    - Indisponibil: Marti 10:00-12:00
+    - Preferinta: Miercuri 8:00-10:00
+H:
+    - Indisponibil: Luni 10:00-12:00
+    - Preferinta: Miercuri 18:00-20:00
+I:
+    - Preferinta: Joi 8:00-10:00
+J:
+    - Indisponibil: Vineri 14:00-16:00
+K:
+    - Indisponibil: Luni 10:00-12:00
+    - Preferinta: Vineri 8:00-10:00
+L:
+    - Indisponibil: Luni 8:00-10:00
+    - Indisponibil: Marti 10:00-12:00
+    - Preferinta: Miercuri 8:00-10:00
+M:
+    - Indisponibil: Luni 10:00-12:00
+    - Preferinta: Miercuri 18:00-20:00
+N:
+    - Indisponibil: Luni 10:00-12:00
+    - Preferinta: Vineri 8:00-10:00
+O:
+    - Indisponibil: Luni 8:00-10:00
+    - Indisponibil: Marti 10:00-12:00
+    - Preferinta: Miercuri 8:00-10:00
+P:
+    - Indisponibil: Luni 10:00-12:00
+    - Preferinta: Miercuri 18:00-20:00
 
 Grupe:
 1A:
@@ -56,6 +127,14 @@ Grupe:
     ML, SI
 3E:
     SI
+4A:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
+4B:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
+4E:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
+4F:
+    IMR, AI, RN, NET, AD, DSFUM, TPM, TMP, HCI, ARMS
 
 Sali:
 C2
