@@ -1,0 +1,10 @@
+Tradițional, un driver este o componentă software ce permite comunicarea între sistemul
+de operare și un dispozitiv, facilitând transferul de date între aplicație și hardware prin
+intermediul sistemului de operare. Driverul, este dezvoltat, de obicei, de producătorul
+dispozitivului.
+Cu toate acestea, sunt situații în care nu este neapărat necesară scrierea unui driver sau
+necesitatea existenței unui dispozitiv hardware pentru a scrie un drive.
+Modurile de operare ale procesorului: Procesorul funcționează fie în modul
+utilizator (pentru aplicații), fie în modul kernel (pentru componentele de bază ale
+sistemului). Aceasta împărțire ne asigură că aplicațiile ce rulează sunt izolate de
+funcțiile critice ale sistemului.

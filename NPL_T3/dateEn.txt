@@ -1,0 +1,28 @@
+Stylometry is the quantitative study of literary style through computational distant reading methods.
+It is based on the observation that authors tend to write in relatively consistent, recognizable and unique ways.
+ For example:
+
+Each person has their own unique vocabulary, sometimes rich, sometimes limited. Although a larger vocabulary
+is usually associated with literary quality, this is not always the case. Ernest Hemingway is famous for using a
+surprisingly small number of different words in his writing,1 which did not prevent him from winning the Nobel Prize
+for Literature in 1954.
+Some people write in short sentences, while others prefer long blocks of text consisting of many clauses.
+No two people use semicolons, em-dashes, and other forms of punctuation in the exact same way.
+The ways in which writers use small function words, such as articles, prepositions and conjunctions,
+has proven particularly telling. In a survey of historical and current stylometric methods,
+Efstathios Stamatatos points out that function words are “used in a largely unconscious manner by the authors,
+and they are topic-independent.”2 For stylometric analysis, this is very advantageous, as such an unconscious pattern is
+likely to vary less, over an author’s corpus, than his or her general vocabulary. (It is also very hard for a would-be forger
+to copy.) Function words have also been identified as important markers of literary genre and of chronology.
+
+Scholars have used stylometry as a tool to study a variety of cultural questions. For example, a considerable
+amount of research has studied the differences between the ways in which men and women write3 or are written about.
+4 Other scholars have studied the ways in which a sudden change in writing style within a single text may indicate plagiarism,
+5 and even the manner in which lyrics penned by musicians John Lennon and Paul McCartney grew progressively less cheerful and
+less active as the Beatles approached the end of their recording career in the 1960s.6
+
+However, one of the most common applications of stylometry is in authorship attribution. Given an anonymous text,
+ it is sometimes possible to guess who wrote it by measuring certain features, like the average number of words per sentence
+ or the propensity of the author to use “while” instead of “whilst”, and comparing the measurements with other texts written
+ by the suspected author. This is what we will be doing in this lesson, using as our test case perhaps the most famous instance
+ of disputed authorship in political writing history, that of the Federalist Papers.
