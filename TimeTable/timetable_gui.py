@@ -3,8 +3,8 @@ import re
 from tkinter import filedialog, messagebox
 import numpy as np  # Asigură-te că numpy este importat
 from timetable import run_scheduler
-from ReadFFile import read_file_timetable
-from ReadFPrompt import read_prompt_timetable
+from read_f_file import read_file_timetable
+from read_f_prompt import read_prompt_timetable
 
 
 # Funcția care va genera orarul pentru fiecare sală într-o fereastră separată

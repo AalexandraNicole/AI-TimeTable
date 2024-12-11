@@ -3,8 +3,8 @@ from tkinter import messagebox, scrolledtext
 from ac3 import main
 import numpy as np
 from collections import deque
-from ReadFFile import read_file_timetable
-from ReadFPrompt import read_prompt_timetable
+from read_f_file import read_file_timetable
+from read_f_prompt import read_prompt_timetable
 from ac3 import run_main_from_gui
 
 

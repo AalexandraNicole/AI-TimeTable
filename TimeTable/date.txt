@@ -244,12 +244,11 @@ Intervale_orare:
 
 # Constrângeri
 Constrangeri_hard:
-  - Unicitate_sala: Un eveniment (curs/seminar) trebuie să fie unic pentru combinația (zi, interval, sală).
+  - Unicitate_sala: Un eveniment trebuie să fie unic pentru combinația (zi, interval, sală).
   - Unicitate_profesor: Un profesor nu poate preda două cursuri simultan.
   - Unicitate_grupa: O grupă nu poate avea mai multe cursuri simultan.
 Constrangeri_soft:
   - Maxim_8_ore_studenti: Nu mai mult de 8 ore pe zi pentru fiecare grupă de studenți.
-  - Cursuri_inainte_seminarii: Cursurile trebuie să fie programate înaintea seminariilor.
 
 # Exemplu program inițial (matrice goală)
 Program_initial_sali:

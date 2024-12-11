@@ -1,5 +1,5 @@
-from ReadFFile import read_file_timetable
-from ReadFPrompt import read_prompt_timetable
+from read_f_file import read_file_timetable
+from read_f_prompt import read_prompt_timetable
 from collections import deque
 import time
 import numpy as np
