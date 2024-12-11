@@ -151,13 +151,24 @@ def on_submit():
         display_schedule_window_per_teacher(schedule, week_days, time_slots, list(professors.keys()), classrooms)
 
     # Butoane pentru alegerea între sală și profesor
-    room_button = tk.Button(choice_window, text="Vezi orarul pentru săli", command=show_room_schedule,
-                            font=('Arial', 14))
+    title_label1 = tk.Label(choice_window, text="Vezi orarul pentru", font=("Arial", 22))
+    title_label1.pack(pady=10)
+    room_button = tk.Button(choice_window, text="săli", command=show_room_schedule,
+                            font=('Arial', 16))
     room_button.pack(pady=10)
 
-    teacher_button = tk.Button(choice_window, text="Vezi orarul pentru profesori", command=show_teacher_schedule,
-                               font=('Arial', 14))
+    teacher_button = tk.Button(choice_window, text="profesori", command=show_teacher_schedule,
+                               font=('Arial', 16))
     teacher_button.pack(pady=10)
+
+
+def show_options():
+    # Afișează opțiunile în aceeași fereastră
+    options_label.pack(pady=10)
+    prompt_radio.pack(anchor=tk.W)
+    file_radio.pack(anchor=tk.W)
+    start_button.pack(pady=20)
+    submit_button.pack_forget()  # Ascunde butonul „Generează Orar”
 
 
 # Interfața principală
@@ -167,10 +178,17 @@ root.geometry("400x400")
 
 method_var = tk.IntVar()
 
-tk.Radiobutton(root, text="Citire Prompt", variable=method_var, value=1, font=('Arial', 12)).pack(anchor=tk.W)
-tk.Radiobutton(root, text="Citire Fișier", variable=method_var, value=2, font=('Arial', 12)).pack(anchor=tk.W)
+title_label = tk.Label(root, text="Timetable Scheduler", font=("Arial", 22))
+title_label.pack(pady=10)
 
-submit_button = tk.Button(root, text="Generează Orar", command=on_submit, font=('Arial', 12))
+# Elemente pentru opțiuni
+options_label = tk.Label(root, text="Selectează metoda de citire:", font=("Arial", 16))
+prompt_radio = tk.Radiobutton(root, text="Citire Prompt", variable=method_var, value=1, font=('Arial', 12))
+file_radio = tk.Radiobutton(root, text="Citire Fișier", variable=method_var, value=2, font=('Arial', 12))
+start_button = tk.Button(root, text="Start", command=on_submit, font=('Arial', 18))
+
+# Butonul pentru generare orar
+submit_button = tk.Button(root, text="Generează Orar", command=show_options, font=('Arial', 18))
 submit_button.pack(pady=20)
 
 root.mainloop()
