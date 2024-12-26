@@ -1,11 +1,18 @@
 import random
 import nltk
+import matplotlib.pyplot as plt
+import seaborn as sns
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.corpus import wordnet as wn
 from langdetect import detect
 from nltk.probability import FreqDist
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.corpus import stopwords
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('punkt_tab')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 # Citește un fișier și returnează conținutul acestuia
 def read_file_into_string(filename):
@@ -52,7 +59,7 @@ def replace_with_synonyms_or_hypernyms(text, replacement_rate=0.2, lang=None):
 
     return ' '.join(new_tokens)
 
-# Analiza stilometrică
+# Funcția de analiză stilometrică
 def stylometric_analysis(text):
     tokens = nltk.word_tokenize(text)
     words = [token for token in tokens if token.isalpha()]
@@ -65,11 +72,60 @@ def stylometric_analysis(text):
     result.append(f"Lungime în caractere: {num_chars}")
     result.append(f"Lungime în cuvinte: {num_words}")
     result.append(f"Număr de cuvinte unice: {num_unique_words}")
+    result.append(f"Distributia frecventelor: {freq_dist}")
     result.append("\nFrecvența celor mai comune 10 cuvinte:")
     for word, freq in freq_dist.most_common(10):
         result.append(f"{word}: {freq}")
 
-    return '\n'.join(result)
+    return num_chars, num_words, num_unique_words, freq_dist
+
+def plot_stylometry(frequency_distribution, num_chars, num_words, num_unique_words):
+    # Extrage cuvintele și frecvențele lor
+    words, freqs = zip(*frequency_distribution.items())
+
+    # Limitează numărul de cuvinte la top 10 pentru a afișa în grafic
+    words = words[:10]
+    freqs = freqs[:10]
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(words, freqs, color='skyblue')
+    plt.xlabel('Cuvinte')
+    plt.ylabel('Frecvență')
+    plt.title('Frecvența celor mai comune cuvinte')
+    plt.xticks(rotation=45, ha='right')
+    plt.tight_layout()
+    plt.show()
+
+    # Diagrama pentru informațiile stilometrice
+    labels = ['Număr de caractere', 'Număr de cuvinte', 'Număr de cuvinte unice']
+    values = [num_chars, num_words, num_unique_words]
+
+    plt.figure(figsize=(8, 5))
+    sns.barplot(x=labels, y=values, hue=labels, palette='muted', legend=False)
+    plt.title('Informații stilometrice')
+    plt.show()
+
+
+def plot_word_length_distribution(text):
+    # Tokenizare
+    tokens = nltk.word_tokenize(text)
+
+    # Filtrare cuvinte (doar cuvinte, nu semne de punctuație)
+    words = [word for word in tokens if word.isalpha()]
+
+    # Calcularea lungimii fiecărui cuvânt
+    word_lengths = [len(word) for word in words]
+
+    # Crearea distribuției de frecvență pentru lungimea cuvintelor
+    freq_dist = FreqDist(word_lengths)
+
+    # Crearea graficului
+    plt.figure(figsize=(10, 6))
+    freq_dist.plot(title="Distribuția lungimii cuvintelor", cumulative=False)
+    plt.xlabel('Lungimea cuvântului (în caractere)')
+    plt.ylabel('Frecvența cuvintelor')
+    plt.show()
+
 
 # Extrage cuvintele cheie și generează propozițiile asociate
 def extract_keywords_and_generate_sentences(text, num_keywords=5, lang='ron'):
@@ -139,6 +195,11 @@ def main():
     # Extrage cuvintele cheie și generează propoziții
     print("\nCuvinte cheie și propoziții asociate:")
     print(extract_keywords_and_generate_sentences(text, lang=lang))
+
+    #Crearea graficelor
+    num_chars, num_words, num_unique_words, freq_dist = stylometric_analysis(text)
+    plot_stylometry(freq_dist, num_chars, num_words, num_unique_words)
+    plot_word_length_distribution(text)
 
 if __name__ == "__main__":
     main()
