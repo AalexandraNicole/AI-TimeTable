@@ -189,6 +189,38 @@ def display_schedule_window_per_course(schedule, week_days, time_slots, courses,
     course_frame.update_idletasks()
     canvas.config(scrollregion=canvas.bbox("all"))
 
+def display_schedule_by_day(schedule, week_days, time_slots, classrooms, courses):
+    main_window = tk.Toplevel()
+    main_window.title("Alege ziua pentru a vizualiza orarul")
+    main_window.geometry("400x400")
+
+    def show_day_schedule(day_idx):
+        day = week_days[day_idx]
+        day_schedule_window = tk.Toplevel()
+        day_schedule_window.title(f"Orar pentru {day}")
+
+        # Adaugă titluri pentru coloană: Intervalele orare
+        tk.Label(day_schedule_window, text="Interval Orar", relief="solid", width=20, font=('Arial', 12)).grid(row=0, column=0)
+        for room_idx, room in enumerate(classrooms):
+            tk.Label(day_schedule_window, text=f"Sala: {room}", relief="solid", width=20, font=('Arial', 12)).grid(row=0, column=room_idx + 1)
+
+        # Adaugă rândurile cu intervalele orare și evenimentele
+        for time_idx, time in enumerate(time_slots):
+            tk.Label(day_schedule_window, text=time, relief="solid", width=20, font=('Arial', 12)).grid(row=time_idx + 1, column=0)
+            for room_idx, room in enumerate(classrooms):
+                event = schedule[day_idx][time_idx][room_idx]
+                if event:
+                    label = tk.Label(day_schedule_window, text=event, relief="solid", width=20, bg="lightgreen", font=('Arial', 12))
+                else:
+                    label = tk.Label(day_schedule_window, text="-", relief="solid", width=20, font=('Arial', 12))
+                label.grid(row=time_idx + 1, column=room_idx + 1)
+
+    # Creează un buton pentru fiecare zi
+    for day_idx, day in enumerate(week_days):
+        button = tk.Button(main_window, text=day, command=lambda index=day_idx: show_day_schedule(index), font=('Arial', 16))
+        button.pack(pady=10, padx=20)
+
+
 
 
 # Funcția care va fi apelată la submit pentru a procesa datele
@@ -236,6 +268,9 @@ def on_submit():
     def show_course_schedule():
         display_schedule_window_per_course(schedule, week_days, time_slots, courses, classrooms)
 
+    def show_day_schedule():
+        display_schedule_by_day(schedule, week_days, time_slots, classrooms, courses)
+
     # Butoane pentru alegerea între sală, profesor și curs
     title_label1 = tk.Label(choice_window, text="Vezi orarul pentru", font=("Arial", 22))
     title_label1.pack(pady=10)
@@ -251,6 +286,9 @@ def on_submit():
                               font=('Arial', 16))
     course_button.pack(pady=10)
 
+    day_button = tk.Button(choice_window, text="zile", command=show_day_schedule, font=('Arial', 16))
+    day_button.pack(pady=10)
+    course_button.pack(pady=10)
  # Buton pentru detalii
     title_label1 = tk.Label(choice_window, text="Sau vezi detalii", font=("Arial", 16))
     title_label1.pack(pady=50)
