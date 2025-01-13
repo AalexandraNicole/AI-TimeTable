@@ -56,11 +56,23 @@ def extract_professor(event_string):
     return ""  # În caz că nu găsim profesorul
 
 
-# Funcția care va genera orarul pentru profesori într-o fereastră separată
 def display_schedule_window_per_teacher(schedule, week_days, time_slots, professors, classrooms):
     main_window = tk.Toplevel()
     main_window.title("Alege profesorul pentru a vizualiza orarul")
     main_window.geometry("400x400")
+
+    # Canvas și scrollbar pentru a permite scroll-ul
+    canvas = tk.Canvas(main_window)
+    canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+    scrollbar = tk.Scrollbar(main_window, orient="vertical", command=canvas.yview)
+    scrollbar.pack(side=tk.RIGHT, fill="y")
+
+    canvas.config(yscrollcommand=scrollbar.set)
+
+    # Frame-ul care conține butoanele
+    button_frame = tk.Frame(canvas)
+    canvas.create_window((0, 0), window=button_frame, anchor="nw")
 
     # Funcție care creează fereastra cu orarul pentru un profesor specific
     def show_teacher_schedule(teacher_index):
@@ -103,10 +115,80 @@ def display_schedule_window_per_teacher(schedule, week_days, time_slots, profess
 
     # Creează un buton pentru fiecare profesor
     for teacher_idx, teacher in enumerate(professors):  # Folosește `professors` direct (ca listă)
-        button = tk.Button(main_window, text=f"Vezi orarul pentru {teacher}",
+        button = tk.Button(button_frame, text=f"Vezi orarul pentru {teacher}",
                            command=lambda teacher_index=teacher_idx: show_teacher_schedule(teacher_index),
-                           font=('Arial', 14))
-        button.pack(pady=5)
+                           font=('Arial', 14), width=25)
+        button.pack(pady=10, padx=30, anchor="center")  # Centrare pe orizontală
+
+    # Actualizează dimensiunea canvas-ului
+    button_frame.update_idletasks()
+    canvas.config(scrollregion=canvas.bbox("all"))
+
+
+
+# Funcția care va genera orarul pentru cursuri într-o fereastră separată
+def display_schedule_window_per_course(schedule, week_days, time_slots, courses, classrooms):
+    main_window = tk.Toplevel()
+    main_window.title("Orar pentru cursuri")
+    main_window.geometry("400x400")
+
+    canvas = tk.Canvas(main_window)
+    canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+    scrollbar = tk.Scrollbar(main_window, orient="vertical", command=canvas.yview)
+    scrollbar.pack(side=tk.RIGHT, fill="y")
+
+    canvas.config(yscrollcommand=scrollbar.set)
+
+    # Frame în care vor fi plasate butoanele pentru fiecare curs
+    course_frame = tk.Frame(canvas)
+
+    # Plasează frame-ul în canvas
+    canvas.create_window((0, 0), window=course_frame, anchor="nw")
+
+    def show_course_schedule(course_idx):
+        course = courses[course_idx]
+        schedule_window = tk.Toplevel()
+        schedule_window.title(f"Orar pentru {course}")
+
+        title_label = tk.Label(schedule_window, text=f"Orar pentru {course}", font=("Arial", 18))
+        title_label.pack(pady=10)
+
+        # Verifică toate perioadele pentru cursul respectiv
+        course_events = []  # Vom stoca evenimentele pentru acest curs
+        for day_idx, day in enumerate(week_days):
+            for time_idx, time in enumerate(time_slots):
+                events = schedule[day_idx][time_idx]
+                if events:  # Dacă există evenimente pentru acea perioadă
+                    for event in events:
+                        if course in event:  # Verifică dacă cursul se află în eveniment
+                            room_idx = events.index(event)
+                            room = classrooms[room_idx]  # Sala este obținută din lista classrooms
+                            event_string = re.sub(r'(\([^)]*\))[^)]*$', '', event)  # Elimina informațiile redundante
+
+                            # Adaugă informațiile despre curs, zi, oră și sală
+                            course_events.append(f"{day} - {time}: {event_string} în {room}")
+
+        # Dacă sunt evenimente pentru acest curs, le afișăm
+        if course_events:
+            for event in course_events:
+                label = tk.Label(schedule_window, text=event, font=('Arial', 12), anchor="w")
+                label.pack(pady=5, padx=10)
+        else:
+            label = tk.Label(schedule_window, text="Nu există evenimente pentru acest curs.", font=('Arial', 12))
+            label.pack(pady=10)
+
+    # Creează un buton pentru fiecare curs
+    for course_idx, course in enumerate(courses):
+        button = tk.Button(course_frame, text=f"Vezi orarul pentru {course}",
+                           command=lambda course_index=course_idx: show_course_schedule(course_index),
+                           font=('Arial', 14), width=25)
+        button.pack(pady=10, padx=30, anchor="center")  # Centerat pe orizontală
+
+    # Actualizează dimensiunile canvas-ului pentru a se ajusta la conținutul său
+    course_frame.update_idletasks()
+    canvas.config(scrollregion=canvas.bbox("all"))
+
 
 
 # Funcția care va fi apelată la submit pentru a procesa datele
@@ -140,10 +222,10 @@ def on_submit():
     else:
         schedule = "Opțiune invalida!"
 
-    # Afișează o fereastră care întreabă dacă vrei să vezi orarul pentru sali sau profesori
+    # Afișează o fereastră care întreabă dacă vrei să vezi orarul pentru sali, profesori sau cursuri
     choice_window = tk.Toplevel()
     choice_window.title("Alege opțiunea")
-    choice_window.geometry("400x400")
+    choice_window.geometry("500x500")
 
     def show_room_schedule():
         display_schedule_window_per_room(schedule, week_days, time_slots, classrooms)
@@ -151,7 +233,10 @@ def on_submit():
     def show_teacher_schedule():
         display_schedule_window_per_teacher(schedule, week_days, time_slots, list(professors.keys()), classrooms)
 
-    # Butoane pentru alegerea între sală și profesor
+    def show_course_schedule():
+        display_schedule_window_per_course(schedule, week_days, time_slots, courses, classrooms)
+
+    # Butoane pentru alegerea între sală, profesor și curs
     title_label1 = tk.Label(choice_window, text="Vezi orarul pentru", font=("Arial", 22))
     title_label1.pack(pady=10)
     room_button = tk.Button(choice_window, text="săli", command=show_room_schedule,
@@ -162,13 +247,16 @@ def on_submit():
                                font=('Arial', 16))
     teacher_button.pack(pady=10)
 
-    # Buton pentru detalii
+    course_button = tk.Button(choice_window, text="cursuri", command=show_course_schedule,
+                              font=('Arial', 16))
+    course_button.pack(pady=10)
+
+ # Buton pentru detalii
     title_label1 = tk.Label(choice_window, text="Sau vezi detalii", font=("Arial", 16))
     title_label1.pack(pady=50)
     details_button = tk.Button(choice_window, text="Detalii", command=...,
                                font=('Arial', 16))
     details_button.pack(pady=10)
-
 
 def show_options():
     # Afișează opțiunile în aceeași fereastră
