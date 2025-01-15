@@ -1,4 +1,4 @@
-![timetable6](https://github.com/user-attachments/assets/853263b9-14a0-4d09-bebd-4680816c6e1c)# AI-TimeTable
+# AI-TimeTable
  TimeTable - sistem capabil să construiască un orar respectând restricțiile definite de utilizatori.
 
  ## Descriere
