@@ -1,6 +1,7 @@
 from collections import Counter
 import re
 
+
 def stylometric_analysis(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         text = f.read()

@@ -6,6 +6,13 @@ from timetable import run_scheduler
 from read_f_file import read_file_timetable
 from read_f_prompt import read_prompt_timetable
 from interfata_ac3 import run_with_gui
+from count_courses import count_courses
+from count_groups import count_groups
+from count_professors import count_professors
+from count_rooms import count_rooms
+from stylometry_info import stylometric_analysis
+
+file_name = ""
 
 
 # Funcția care va genera orarul pentru fiecare sală într-o fereastră separată
@@ -125,7 +132,6 @@ def display_schedule_window_per_teacher(schedule, week_days, time_slots, profess
     canvas.config(scrollregion=canvas.bbox("all"))
 
 
-
 # Funcția care va genera orarul pentru cursuri într-o fereastră separată
 def display_schedule_window_per_course(schedule, week_days, time_slots, courses, classrooms):
     main_window = tk.Toplevel()
@@ -189,6 +195,7 @@ def display_schedule_window_per_course(schedule, week_days, time_slots, courses,
     course_frame.update_idletasks()
     canvas.config(scrollregion=canvas.bbox("all"))
 
+
 def display_schedule_by_day(schedule, week_days, time_slots, classrooms, courses):
     main_window = tk.Toplevel()
     main_window.title("Alege ziua pentru a vizualiza orarul")
@@ -200,27 +207,30 @@ def display_schedule_by_day(schedule, week_days, time_slots, classrooms, courses
         day_schedule_window.title(f"Orar pentru {day}")
 
         # Adaugă titluri pentru coloană: Intervalele orare
-        tk.Label(day_schedule_window, text="Interval Orar", relief="solid", width=20, font=('Arial', 12)).grid(row=0, column=0)
+        tk.Label(day_schedule_window, text="Interval Orar", relief="solid", width=20, font=('Arial', 12)).grid(row=0,
+                                                                                                               column=0)
         for room_idx, room in enumerate(classrooms):
-            tk.Label(day_schedule_window, text=f"Sala: {room}", relief="solid", width=20, font=('Arial', 12)).grid(row=0, column=room_idx + 1)
+            tk.Label(day_schedule_window, text=f"Sala: {room}", relief="solid", width=20, font=('Arial', 12)).grid(
+                row=0, column=room_idx + 1)
 
         # Adaugă rândurile cu intervalele orare și evenimentele
         for time_idx, time in enumerate(time_slots):
-            tk.Label(day_schedule_window, text=time, relief="solid", width=20, font=('Arial', 12)).grid(row=time_idx + 1, column=0)
+            tk.Label(day_schedule_window, text=time, relief="solid", width=20, font=('Arial', 12)).grid(
+                row=time_idx + 1, column=0)
             for room_idx, room in enumerate(classrooms):
                 event = schedule[day_idx][time_idx][room_idx]
                 if event:
-                    label = tk.Label(day_schedule_window, text=event, relief="solid", width=20, bg="lightgreen", font=('Arial', 12))
+                    label = tk.Label(day_schedule_window, text=event, relief="solid", width=20, bg="lightgreen",
+                                     font=('Arial', 12))
                 else:
                     label = tk.Label(day_schedule_window, text="-", relief="solid", width=20, font=('Arial', 12))
                 label.grid(row=time_idx + 1, column=room_idx + 1)
 
     # Creează un buton pentru fiecare zi
     for day_idx, day in enumerate(week_days):
-        button = tk.Button(main_window, text=day, command=lambda index=day_idx: show_day_schedule(index), font=('Arial', 16))
+        button = tk.Button(main_window, text=day, command=lambda index=day_idx: show_day_schedule(index),
+                           font=('Arial', 16))
         button.pack(pady=10, padx=20)
-
-
 
 
 # Funcția care va fi apelată la submit pentru a procesa datele
@@ -271,6 +281,42 @@ def on_submit():
     def show_day_schedule():
         display_schedule_by_day(schedule, week_days, time_slots, classrooms, courses)
 
+    def show_stylometric_details():
+        file_path = file_name
+        try:
+            stylometric_info = stylometric_analysis(file_path)
+
+            stylometric_window = tk.Toplevel()
+            stylometric_window.title("Informații stilometrice")
+            stylometric_window.geometry("")
+
+            stylometric_label = tk.Label(stylometric_window, text=stylometric_info, font=("Arial", 14), justify="left")
+            stylometric_label.pack(pady=20, padx=20)
+        except FileNotFoundError:
+            messagebox.showerror("Eroare", f"Fișierul {file_path} nu a fost găsit.")
+
+    def show_details():
+        file_path = file_name
+        try:
+            courses_count = count_courses(file_path)
+            groups_count = count_groups(file_path)
+            professors_count = count_professors(file_path)
+            rooms_count = count_rooms(file_path)
+            details = f"{courses_count}\n{groups_count}\n{professors_count}\n{rooms_count}"
+
+            details_window = tk.Toplevel()
+            details_window.title("Detalii")
+            details_window.geometry("400x300")
+
+            # Adaugă un widget Label pentru a afișa detaliile
+            details_label = tk.Label(details_window, text=details, font=("Arial", 14), justify="left")
+            details_label.pack(pady=20, padx=20)
+            stylometric_button = tk.Button(details_window, text="Informații Stilometrice",
+                                           command=show_stylometric_details, font=('Arial', 16))
+            stylometric_button.pack(pady=10)
+        except FileNotFoundError:
+            messagebox.showerror("Eroare", f"Fișierul {file_path} nu a fost găsit.")
+
     # Butoane pentru alegerea între sală, profesor și curs
     title_label1 = tk.Label(choice_window, text="Vezi orarul pentru", font=("Arial", 22))
     title_label1.pack(pady=10)
@@ -289,12 +335,12 @@ def on_submit():
     day_button = tk.Button(choice_window, text="zile", command=show_day_schedule, font=('Arial', 16))
     day_button.pack(pady=10)
     course_button.pack(pady=10)
- # Buton pentru detalii
+    # Buton pentru detalii
     title_label1 = tk.Label(choice_window, text="Sau vezi detalii", font=("Arial", 16))
     title_label1.pack(pady=50)
-    details_button = tk.Button(choice_window, text="Detalii", command=...,
-                               font=('Arial', 16))
+    details_button = tk.Button(choice_window, text="Detalii", command=show_details, font=('Arial', 16))
     details_button.pack(pady=10)
+
 
 def show_options():
     # Afișează opțiunile în aceeași fereastră
