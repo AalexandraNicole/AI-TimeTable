@@ -28,5 +28,10 @@ https://docs.google.com/document/d/1EyxLXuwqrJSY9rjqUas8LakwA1yMDAaA/edit
    - În cazul în care constrângerile sunt respectate, aplicația va produce un orar pentru cursuri și seminarii.
 
 5. **Interfață Grafică**:
-   - O interfață grafică. 
+   - O interfață grafică pentru vizualizarea orarului.
+
+6. **Detalii NLP**
+   - Detalii despre fișierul procesat, inclusiv informații stilometrice.
+  
+   ![timetable1](https://github.com/user-attachments/assets/4f83da53-3229-46c5-a17f-3344f1e91791)
 
