@@ -3,7 +3,7 @@
 
  ## Descriere
 
-Această aplicație facilitează gestionarea programului de cursuri și seminarii în mediul academic, permițând utilizatorilor să definească și să gestioneze variabilele esențiale pentru crearea unui orar optim.
+Această aplicație facilitează gestionarea programului de cursuri în mediul academic, permițând utilizatorilor să definească și să gestioneze variabilele esențiale pentru crearea unui orar optim.
 
 CORNEA ALEXANDRA-NICOLETA
 
@@ -25,7 +25,7 @@ https://docs.google.com/document/d/1EyxLXuwqrJSY9rjqUas8LakwA1yMDAaA/edit
 ## Funcționalități Principale
 
 1. **Definirea Entităților**:
-   - Utilizatorii pot defini profesori, intervalele de timp disponibile, sălile de curs, cursurile și seminariile, precum și grupele de studenți.
+   - Utilizatorii pot defini profesori, intervalele de timp disponibile, sălile de curs, cursurile, precum și grupele de studenți.
 
 2. **Adăugarea Constrângerilor**:
    - Se pot adăuga constrângeri specifice pentru profesori, cum ar fi disponibilitatea, preferințe legate de orele de curs și restricții referitoare la sălile de clasă.
