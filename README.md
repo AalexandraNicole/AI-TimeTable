@@ -5,11 +5,16 @@
 
 Această aplicație facilitează gestionarea programului de cursuri în mediul academic, permițând utilizatorilor să definească și să gestioneze variabilele esențiale pentru crearea unui orar optim.
 
+## Lucru în echipă:
+
+Distribuția lucrului: toți membrii au contribuit în mod egal la realizarea proiectului.  
+
 CORNEA ALEXANDRA-NICOLETA
 
 GROZEA TATIANA  
 
 PINTECAN ALEXANDRU  
+
 
 https://docs.google.com/document/d/1EyxLXuwqrJSY9rjqUas8LakwA1yMDAaA/edit
 
